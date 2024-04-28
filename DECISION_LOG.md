@@ -1,0 +1,65 @@
+# Solution to the frontend challenge for DigitalService
+by Manuel Minniti
+
+## Approach
+I am going to document my approach here for a better insight into my decision making.
+
+I will use English as the preferred language, since the challenge text is also written in English, likely in order to provide more accessibility.
+
+Comments in the code will provide more in-depth explanations where applicable.
+
+___
+
+## Task
+
+Create a small web application that provides a dashboard showing how many data sets each federal ministry has made available on GovData. The dashboard should provide the possibility to filter the currently shown result set. It should be easy to tell from the dashboard which ministries have provided the most data.
+
+Data for the dashboard is going to be provided by a backend in the future, but such an API is not in place yet (imagine your colleagues are working on it). Provided already is an exemplary JSON file that resembles a response from the planned API.
+
+Use a non-proprietary tech stack of your choice and explain in a readme how to run your solution. Please use version control (git is preferred).
+
+---
+
+## Prerequisites
+The target audience will likely be the frontend team of DigitalService to evaluate my approach to a technical frontend challenge. The task seems to be very close to an actual business case (perhaps service.justiz.de or something similar?). In the future the target audience may include ordinary citizens as well – so I'll try to cater to both.
+
+**Target audience: DigitalService Frontend Team, German citizens**
+
+I am going with some _sensible defaults_ instead of writing some library functions and UI myself. For this I will use [create-react-app](https://create-react-app.dev/), since it is open source and provides some great boilerplate and options.
+I will also use Typescript which will be a good refresher course and I assume DigitalService is likely invested to some degree in the use of Typescript.
+Linting goes hand-in-hand with Typescript so that will be a handy tool and also to keep the code clean and readable.
+Since most (or all) of the code by DigitalService is open source, I will also make use of their [Style Guide](https://digitalservicebund.github.io/angie/) and [Dictionary](https://github.com/digitalservicebund/style-dictionary).
+
+**Sensible defaults: create-react-app, Typescript, Linting, DigitalService Style Guide and Dictionary**
+
+The data will be provided via a very simple (NoSQL) backend/REST API using the [json-server](https://www.npmjs.com/package/json-server) package, just so we can mimic a real server in the wild.
+
+**Backend/API: json-server**
+
+## Log
+
+Okay, let's roll 🚀! Let's initialize the project by creating a new public Github repo and clone it to my local machine.
+
+- Create a new folder for the challenge:
+> `mkdir ~/digitalservice-frontend-challenge && cd ~/digitalservice-frontend-challenge && git clone git@github.com:manuel-minniti/digitalservice-frontend-challenge-solution.git .`
+- Run the create-react-app script with `npx create-react-app . --template typescript` (to create the project in the current folder)
+- The CLI is telling us that:
+> You are running `create-react-app` 4.0.3, which is behind the latest release (5.0.0).
+> We no longer support global installation of Create React App
+- So we need to install a newer nodeJS version to get a fresh version of npx I think.
+- Upgrading nodeJS to use the latest LTS version, via `curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.2/install.sh | bash` and then `nvm install --lts`
+- ~~Now we can use `npx create-react-app . --template typescript`~~
+- Small change of plans: we are going to use yarn as our package manager instead of npm since it is [a lot faster than npm](https://www.copycat.dev/blog/yarn-vs-npm/#:~:text=Yarn%20vs%20npm%20Speed%3A,speeds%20up%20the%20installation%20process.).
+- Install create-react-app via yarn:
+`yarn create react-app . --template typescript`
+- Add the DECISION_LOG.md file to the project.
+- Let's install json-server with
+> `yarn add json-server -D`
+- Since the Angie design system and the style dictionary make use of Tailwind, we will install it as well following these [instructions](https://tailwindcss.com/docs/guides/create-react-app).
+> `yarn add -D tailwindcss`
+- Install the [Angie design system](https://github.com/digitalservicebund/angie) and the [style dictionary](https://github.com/digitalservicebund/style-dictionary).
+> `yarn add @digitalservice4germany/style-dictionary @digitalservice4germany/angie`
+- Let's follow the guidelines to use those two packages in our project.
+- Great, this is a good time to run our project as a sanity check via `yarn start` and make our first commit!
+> `yarn start`
+- We're greeted by the React logo and everything looks nice and boring (still!).
