@@ -1,3 +1,8 @@
+# digitalservice-frontend-challenge-solution
+Solution for the frontend challenge for DigitalService by Manuel Minniti.
+
+For a more detailed report please have a look at the **./DECISION_LOG.md** file.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -21,7 +21,7 @@ Use a non-proprietary tech stack of your choice and explain in a readme how to r
 ---
 
 ## Prerequisites
-The target audience will likely be the frontend team of DigitalService to evaluate my approach to a technical frontend challenge. The task seems to be very close to an actual business case (perhaps service.justiz.de or something similar?). In the future the target audience may include ordinary citizens as well – so I'll try to cater to both.
+The target audience will likely be the frontend team of DigitalService to evaluate my approach to a technical frontend challenge. The task seems to be very close to an actual business case (perhaps service.justiz.de or something similar?). In the future the target audience may include ordinary citizens as well – so I'll try to cater to both. I will use German in the UI, although an actual app will likely be multilingual.
 
 **Target audience: DigitalService Frontend Team, German citizens**
 
@@ -63,3 +63,49 @@ Okay, let's roll 🚀! Let's initialize the project by creating a new public Git
 - Great, this is a good time to run our project as a sanity check via `yarn start` and make our first commit!
 > `yarn start`
 - We're greeted by the React logo and everything looks nice and boring (still!).
+- Now that we have a basic project we can initialize our data and the backend.
+- Let's create a directory for the JSON database
+> `mkdir db && touch db/db.json`
+- Now let's put our data (backend-response.json) from the challenge into the JSON file and also add a "pseudo-column" called `departments` where we list all items. Our `db.json` now looks like this:
+> ```
+{
+    "departments": [
+        {
+          "department": "Statistisches Bundesamt",
+          "description": "Statistisches Bundesamt",
+          "datasets": 2372
+        },
+        (...)
+    ]
+}
+```
+- We have to adjust the `start` script in the `package.json` to start the json-server first and then run the React app. By default json-server will run on port 3000, the same as the React app by default. To prevent a clash we simply start the json-server on port 3004.
+> ```
+"start": "json-server --watch db/db.json --port 3004 & react-scripts start"
+```
+- To avoid zombie processes, we will install the [concurrently](https://www.npmjs.com/package/concurrently) package which handles multiple processes.
+> `yarn add concurrently -D`
+- Probably best to create separate npm scripts for starting the DB and the React app separately (and add some colors):
+> ```
+"start:frontend": "react-scripts start",
+"start:backend": "json-server --watch db/db.json --port 3004",
+"start": "concurrently -n \"BACKEND,FRONTEND\" -c \"red,blue\" -p \"[{name}]\" \"npm run start:backend\" \"npm run start:frontend\"",
+```
+- I am getting some annoying "Something is already running on port 3000." errors so let's use a `.env` file where we can set the ports (which is probably useful for others).
+> ```
+REACT_APP_DB_PORT=3004
+PORT=3001
+```
+- Our start scripts become:
+- ```
+"start:frontend": "react-scripts start",
+"start:backend": "source .env && json-server --watch db/db.json --port $REACT_APP_DB_PORT",
+```
+- Now let's use linting and formatting defaults from the [typescript-vite-application-template](https://github.com/digitalservicebund/typescript-vite-application-template) and install required dependencies. We'll need the `.prettierrc` and `eslintrc.cjs` and we'll add the linting and formatting NPM scripts (but only for the `./src` directory).
+> `yarn add eslint@^8.57.0 prettier eslint-config-prettier eslint-plugin-prettier typescript-eslint -D`
+- Cool, we got the data on http://localhost:3004/departments and now we can start creating our UI. Since we only need a dashboard, no routing is required.
+> `mkdir -p src/pages/dashboard && touch src/pages/dashboard/index.tsx`
+- Let's use react-query to fetch our data since it provides some handy utilities.
+> `yarn add @tanstack/react-query`
+- Let's also use react-error-boundary for catching errors.
+> `yarn add react-error-boundary`
