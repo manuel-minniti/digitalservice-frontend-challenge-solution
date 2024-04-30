@@ -12,6 +12,7 @@ import { useDepartments } from "../../api/department"
 import { IDepartment } from "../../types/department"
 
 function DashboardContent() {
+  // Fetch departments from the API.
   const { data: departments, isFetching, error, refetch } = useDepartments()
 
   const [departmentFilter, setDepartmentFilter] = React.useState("")
@@ -25,6 +26,7 @@ function DashboardContent() {
     setDepartmentFilter(event.target.value)
   }
 
+  // Apply the department filter.
   React.useEffect(() => {
     if (departmentFilter === "") {
       setFilteredDepartments(departments)

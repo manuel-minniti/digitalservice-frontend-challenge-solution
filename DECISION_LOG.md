@@ -41,8 +41,13 @@ The data will be provided via a very simple (NoSQL) backend/REST API using the [
 Okay, let's roll 🚀! Let's initialize the project by creating a new public Github repo and clone it to my local machine.
 
 - Create a new folder for the challenge:
-> `mkdir ~/digitalservice-frontend-challenge && cd ~/digitalservice-frontend-challenge && git clone git@github.com:manuel-minniti/digitalservice-frontend-challenge-solution.git .`
-- Run the create-react-app script with `npx create-react-app . --template typescript` (to create the project in the current folder)
+```
+mkdir ~/digitalservice-frontend-challenge && cd ~/digitalservice-frontend-challenge && git clone git@github.com:manuel-minniti/digitalservice-frontend-challenge-solution.git .
+```
+- Run the create-react-app script with
+```
+npx create-react-app . --template typescript
+```
 - The CLI is telling us that:
 > You are running `create-react-app` 4.0.3, which is behind the latest release (5.0.0).
 > We no longer support global installation of Create React App
@@ -51,23 +56,35 @@ Okay, let's roll 🚀! Let's initialize the project by creating a new public Git
 - ~~Now we can use `npx create-react-app . --template typescript`~~
 - Small change of plans: we are going to use yarn as our package manager instead of npm since it is [a lot faster than npm](https://www.copycat.dev/blog/yarn-vs-npm/#:~:text=Yarn%20vs%20npm%20Speed%3A,speeds%20up%20the%20installation%20process.).
 - Install create-react-app via yarn:
-`yarn create react-app . --template typescript`
-- Add the DECISION_LOG.md file to the project.
+```
+yarn create react-app . --template typescript
+```
+- Add the `DECISION_LOG.md` file to the project.
 - Let's install json-server with
-> `yarn add json-server -D`
-- Since the Angie design system and the style dictionary make use of Tailwind, we will install it as well following these [instructions](https://tailwindcss.com/docs/guides/create-react-app).
-> `yarn add -D tailwindcss`
+```
+yarn add json-server -D
+```
+- Since the Angie design system and the style dictionary make use of Tailwind, we will install it as well following these [instructions](https://tailwindcss.com/docs/guides/create-react-app). I haven't used Tailwind before so this will be a great exercise. 
+```
+yarn add -D tailwindcss
+```
 - Install the [Angie design system](https://github.com/digitalservicebund/angie) and the [style dictionary](https://github.com/digitalservicebund/style-dictionary).
-> `yarn add @digitalservice4germany/style-dictionary @digitalservice4germany/angie`
+```
+yarn add @digitalservice4germany/style-dictionary @digitalservice4germany/angie
+```
 - Let's follow the guidelines to use those two packages in our project.
 - Great, this is a good time to run our project as a sanity check via `yarn start` and make our first commit!
-> `yarn start`
+```
+yarn start
+```
 - We're greeted by the React logo and everything looks nice and boring (still!).
 - Now that we have a basic project we can initialize our data and the backend.
 - Let's create a directory for the JSON database
-> `mkdir db && touch db/db.json`
+```
+mkdir db && touch db/db.json
+```
 - Now let's put our data (backend-response.json) from the challenge into the JSON file and also add a "pseudo-column" called `departments` where we list all items. Our `db.json` now looks like this:
-> ```
+```
 {
     "departments": [
         {
@@ -80,32 +97,51 @@ Okay, let's roll 🚀! Let's initialize the project by creating a new public Git
 }
 ```
 - We have to adjust the `start` script in the `package.json` to start the json-server first and then run the React app. By default json-server will run on port 3000, the same as the React app by default. To prevent a clash we simply start the json-server on port 3004.
-> ```
+```
 "start": "json-server --watch db/db.json --port 3004 & react-scripts start"
 ```
 - To avoid zombie processes, we will install the [concurrently](https://www.npmjs.com/package/concurrently) package which handles multiple processes.
-> `yarn add concurrently -D`
+`yarn add concurrently -D`
 - Probably best to create separate npm scripts for starting the DB and the React app separately (and add some colors):
-> ```
+```
 "start:frontend": "react-scripts start",
 "start:backend": "json-server --watch db/db.json --port 3004",
 "start": "concurrently -n \"BACKEND,FRONTEND\" -c \"red,blue\" -p \"[{name}]\" \"npm run start:backend\" \"npm run start:frontend\"",
 ```
 - I am getting some annoying "Something is already running on port 3000." errors so let's use a `.env` file where we can set the ports (which is probably useful for others).
-> ```
+```
 REACT_APP_DB_PORT=3004
 PORT=3001
 ```
 - Our start scripts become:
-- ```
+```
 "start:frontend": "react-scripts start",
 "start:backend": "source .env && json-server --watch db/db.json --port $REACT_APP_DB_PORT",
 ```
 - Now let's use linting and formatting defaults from the [typescript-vite-application-template](https://github.com/digitalservicebund/typescript-vite-application-template) and install required dependencies. We'll need the `.prettierrc` and `eslintrc.cjs` and we'll add the linting and formatting NPM scripts (but only for the `./src` directory).
-> `yarn add eslint@^8.57.0 prettier eslint-config-prettier eslint-plugin-prettier typescript-eslint -D`
+```
+yarn add eslint@^8.57.0 prettier eslint-config-prettier eslint-plugin-prettier typescript-eslint -D
+```
 - Cool, we got the data on http://localhost:3004/departments and now we can start creating our UI. Since we only need a dashboard, no routing is required.
-> `mkdir -p src/pages/dashboard && touch src/pages/dashboard/index.tsx`
+```
+mkdir -p src/pages/dashboard && touch src/pages/dashboard/index.tsx
+```
 - Let's use react-query to fetch our data since it provides some handy utilities.
-> `yarn add @tanstack/react-query`
+```
+yarn add @tanstack/react-query
+```
 - Let's also use react-error-boundary for catching errors.
-> `yarn add react-error-boundary`
+```
+yarn add react-error-boundary
+```
+- Okay, we have created the dashboard page and required components and added a visualisation for the number of datasets and also a filter select to choose a specific department.
+- The app is also throwing a random error every now and then to test the error boundary.
+- Let's add some tests and I think we can wrap this up.
+- Mocking react-query seems to be a bit of a pain. I think going forward I'd remove this library and simply implement a custom data fetching logic.
+
+## Wrapping up
+- For the future I'd like to improve on the types and interfaces used in the project
+- Also, a tighter integration with the Angie design system would be great
+- Separating presentational components from logic would be a good idea
+- A more opinionated folder structure (perhaps on a per-feature basis? MVC?)
+- Get rid of react-query and write more tests (especially for data fetching)

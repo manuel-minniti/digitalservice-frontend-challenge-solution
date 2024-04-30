@@ -44,7 +44,8 @@ function Department({
       </div>
       <div className="ds-label-03-reg">{description}</div>
       <div className="ds-label-03-reg">
-        <span className="ds-label-03-bold">{datasets}</span> {datasets === 1 ? "Datensatz" : "Datensätze"}
+        <span className="ds-label-03-bold">{datasets}</span>{" "}
+        {datasets === 1 ? "Datensatz" : "Datensätze"}
       </div>
       <DatasetCountVisualisation
         datasets={datasets}

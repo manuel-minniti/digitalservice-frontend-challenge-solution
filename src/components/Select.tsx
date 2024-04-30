@@ -2,7 +2,7 @@ interface SelectProps {
   className?: string
   emptyOptionLabel?: string
   label: string
-  renderOptions: () => React.ReactNode,
+  renderOptions: () => React.ReactNode
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
@@ -11,7 +11,7 @@ function Select({
   label,
   emptyOptionLabel,
   renderOptions,
-  onChange
+  onChange,
 }: SelectProps) {
   return (
     <div className={className}>

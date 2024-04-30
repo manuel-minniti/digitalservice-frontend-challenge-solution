@@ -15,7 +15,9 @@ export async function fetchDepartments() {
   const response = await fetch(DEPARTMENTS_ENDPOINT)
 
   // Simulate random network error.
-  if (Math.random() < 0.3 || !response.ok) {
+  const shouldThrowError =
+    process.env.NODE_ENV === "development" && Math.random() < 0.2
+  if (shouldThrowError || !response.ok) {
     throw new Error("Die Abteilungen konnten nicht geladen werden.")
   }
 
