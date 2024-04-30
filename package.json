@@ -23,7 +23,7 @@
     },
     "scripts": {
         "start:frontend": "react-scripts start",
-        "start:backend": "source .env && json-server --watch db/db.json --port $REACT_APP_DB_PORT",
+        "start:backend": "source ./.env && json-server --watch db/db.json --port $REACT_APP_DB_PORT",
         "start": "concurrently -n \"BACKEND,FRONTEND\" -c \"red,blue\" -p \"[{name}]\" \"npm run start:backend\" \"npm run start:frontend\"",
         "build": "react-scripts build",
         "test": "react-scripts test",

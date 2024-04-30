@@ -5,7 +5,24 @@ For a more detailed report please have a look at the **./DECISION_LOG.md** file.
 
 ## Installation
 
-Simply run `yarn install` followed by `yarn start`.
+```
+git clone https://github.com/manuel-minniti/digitalservice-frontend-challenge-solution.git digitalservice-frontend-challenge-solution-manuel-minniti
+cd digitalservice-frontend-challenge-solution-manuel-minniti
+yarn install --production=false
+yarn start
+```
+
+If `yarn start` fails to start, you can manually start the backend and frontend with the following commands:
+
+```
+yarn start:backend
+```
+
+and in a separate terminal:
+
+```
+yarn start:frontend
+```
 
 ## Available Scripts
 
